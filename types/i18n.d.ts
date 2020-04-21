@@ -38,7 +38,6 @@ declare global {
       // Otherwise recurse into any properties and repeat.
       {[K in keyof T]: Icu<T[K]>};
 
-    // TODO(bckenny): `LocalizedIcu<>`?
     /**
      * A helper to represent the localization process, recursively finding all
      * `LH.IcuMessage` properties in `T` and replacing them with `string`.
@@ -46,11 +45,11 @@ declare global {
      * Essentially undoes `LH.Icu<T>`, but as with that type, prefer using types
      * with explicit `string` properties over this helper if possible.
      */
-    type FormattedIcu<T> = IcuMessage extends T ?
+    type LocalizedIcu<T> = IcuMessage extends T ?
       // All LH.IcuMessages replaced with strings.
       Exclude<T, IcuMessage> | string :
       // Otherwise recurse into any properties and repeat.
-      {[K in keyof T]: FormattedIcu<T[K]>};
+      {[K in keyof T]: LocalizedIcu<T[K]>};
 
     /**
      * Info about an `LH.IcuMessage` value that was localized to a string. Value
@@ -70,7 +69,6 @@ declare global {
     export interface IcuMessagePaths {
       [i18nId: string]: IcuMessagePath[];
     }
-    // TODO(bckenny): the type is really Array<string> | Array<{path: string, values: ...}>, but that might just be more annoying in swap-locale
 
     // TODO(bckenny): why is it important to have this specifically keyed?
     export type I18NRendererStrings = typeof Util['UIStrings'];
